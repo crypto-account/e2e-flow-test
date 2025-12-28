@@ -8,7 +8,8 @@ workflows:
       # ŚRODOWISKO DEV
       - cypress/run:
           name: "Testy na DEV"
-          executor: cypress/browsers-chrome
+          install-browsers: true
+          browser: chrome
           start-command: npm run start:dev
           cypress-command: npx wait-on@latest http://localhost:3000 && npx cypress run --browser chrome
           filters:
