@@ -17,7 +17,7 @@ workflows:
       # ŚRODOWISKO PREPROD
       - cypress/run:
           name: "Testy na PREPROD"
-          cypress-command: npx cypress run --browser chrome --config baseUrl=http://preprod.twoja-apka.pl
+          cypress-command: npx cypress run --electron chrome --config baseUrl=http://preprod.twoja-apka.pl
           filters:
             branches:
               only: main
@@ -28,6 +28,6 @@ workflows:
             - "Testy na PREPROD"
       - cypress/run:
           name: "Testy na PROD"
-          cypress-command: npx cypress run --browser chrome --config baseUrl=http://www.twoja-apka.pl
+          cypress-command: npx cypress run --electron chrome --config baseUrl=http://www.twoja-apka.pl
           requires:
             - hold
