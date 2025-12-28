@@ -9,7 +9,7 @@ workflows:
       - cypress/run:
           name: "Testy na DEV"
           start-command: npm run start:dev
-          cypress-command: npx wait-on@latest http://localhost:3000 && npx cypress run --browser chrome
+          cypress-command: npx wait-on@latest http://localhost:3000 && npx cypress run --browser electron
           filters:
             branches:
               ignore: main
