@@ -1,10 +1,36 @@
-version: '2.1'
+version: 2.1
 orbs:
-  cypress: cypress-io/cypress@6
+  cypress: cypress-io/cypress@3
+
 workflows:
-  use-my-orb:
+  pipeline:
     jobs:
+      # ŚRODOWISKO DEV (Uruchamia się na każdym PR)
       - cypress/run:
-          cypress-command: npx cypress run --browser chrome
-          install-browsers: true
+          name: "Testy na DEV"
           start-command: npm run start:dev
+          wait-on: "http://localhost:3000"
+          filters:
+            branches:
+              ignore: main
+
+      # ŚRODOWISKO PREPROD (Tylko po merge do main)
+      - cypress/run:
+          name: "Testy na PREPROD"
+          # Symulujemy uderzenie w działający serwer preprodukcyjny
+          # W realu tutaj byłby adres Twojego serwera stagingowego
+          cypress-command: npx cypress run --config baseUrl=http://preprod.twoja-apka.pl
+          filters:
+            branches:
+              only: main
+
+      # ŚRODOWISKO PROD (Wymaga ręcznego potwierdzenia)
+      - hold:
+          type: approval
+          requires:
+            - "Testy na PREPROD"
+      - cypress/run:
+          name: "Testy na PROD"
+          cypress-command: npx cypress run --config baseUrl=http://www.twoja-apka.pl
+          requires:
+            - hold
