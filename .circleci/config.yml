@@ -8,7 +8,8 @@ workflows:
       # ŚRODOWISKO DEV
       - cypress/run:
           name: "Testy na DEV"
-          start: npm run start:dev        # W v3 używamy 'start' zamiast 'start-command'
+          # W v6 używamy start-command
+          start-command: npm run start:dev        
           wait-on: "http://localhost:3000"
           browser: chrome
           filters:
@@ -18,8 +19,8 @@ workflows:
       # ŚRODOWISKO PREPROD
       - cypress/run:
           name: "Testy na PREPROD"
-          spec: cypress/e2e/** # Opcjonalnie wskaż ścieżkę do testów
-          cypress-command: npx cypress run --config baseUrl=http://preprod.twoja-apka.pl
+          # Jeśli używasz cypress-command, parametry przeglądarki dopisz w komendzie
+          cypress-command: npx cypress run --browser chrome --config baseUrl=http://preprod.twoja-apka.pl
           filters:
             branches:
               only: main
@@ -31,6 +32,6 @@ workflows:
             - "Testy na PREPROD"
       - cypress/run:
           name: "Testy na PROD"
-          cypress-command: npx cypress run --config baseUrl=http://www.twoja-apka.pl
+          cypress-command: npx cypress run --browser chrome --config baseUrl=http://www.twoja-apka.pl
           requires:
             - hold
