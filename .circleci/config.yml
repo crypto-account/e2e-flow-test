@@ -9,7 +9,6 @@ workflows:
       - cypress/run:
           name: "Testy na DEV"
           install-browsers: true
-          browser: chrome
           start-command: npm run start:dev
           cypress-command: npx wait-on@latest http://localhost:3000 && npx cypress run --browser chrome
           filters:
@@ -19,7 +18,7 @@ workflows:
       # ŚRODOWISKO PREPROD
       - cypress/run:
           name: "Testy na PREPROD"
-          executor: cypress/browsers-chrome
+          install-browsers: true
           cypress-command: npx cypress run --browser chrome --config baseUrl=http://preprod.twoja-apka.pl
           filters:
             branches:
@@ -31,6 +30,7 @@ workflows:
             - "Testy na PREPROD"
       - cypress/run:
           name: "Testy na PROD"
+          install-browsers: true
           cypress-command: npx cypress run --browser chrome --config baseUrl=http://www.twoja-apka.pl
           requires:
             - hold
